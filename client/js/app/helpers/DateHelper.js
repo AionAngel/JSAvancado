@@ -9,6 +9,9 @@ class DateHelper {
     
     static textoParaData(texto) {
         
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
+            throw new Error("Numero esta fora do formato");
+        }
         return new Date(...texto.split('-').map((item,indice) => item - indice % 2));
         
     }
@@ -16,7 +19,7 @@ class DateHelper {
     
     static dataParaTexto(data) {
         
-        return data.getDate() + '/' + (data.getMonth() + 1) + '/' + data.getFullYear();
+        return `${data.getDate()}/${data.getMonth() + 1}/${data.getFullYear()}`;
     }
     
 }

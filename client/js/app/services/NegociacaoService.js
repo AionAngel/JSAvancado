@@ -4,6 +4,25 @@ class NegociacaoService {
         this._http = new HttpService();
     }
 
+    obterNegociacoes() {
+        
+        return Promise.all([
+            this.obterNegociacoesDaSemana(),
+            this.obterNegociacoesDaSemanaAnterior(),
+            this.obterNegociacoesDaSemanaRetrasada()
+            ]).then(periodos => {
+        
+            let negociacoes = periodos
+                .reduce((dados, periodo) => dados.concat(periodo), []);
+        
+            return negociacoes;
+        
+        }).catch(erro => {
+            throw new Error(erro);
+        });
+        
+    } 
+
     obterNegociacoesDaSemana() {
 
         return new Promise((resolve, reject) => {
@@ -34,7 +53,7 @@ class NegociacaoService {
                         })
                         .catch(erro => {
                             console.log(erro);
-                            reject('Não foi possivel obter as negociacoes da semana');
+                            reject('Não foi possivel obter as negociacoes da semana anterior');
                         })
         
                 });
@@ -53,7 +72,7 @@ class NegociacaoService {
                         })
                         .catch(erro => {
                             console.log(erro);
-                            reject('Não foi possivel obter as negociacoes da semana');
+                            reject('Não foi possivel obter as negociacoes da semana retrasada');
                         })
         
                 });

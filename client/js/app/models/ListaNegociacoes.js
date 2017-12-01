@@ -19,7 +19,7 @@ class ListaNegociacoes {
         
     }
     
-    apaga() {
+    esvazia() {
         
         this._negociacoes = [];
         //this._armadilha(this);

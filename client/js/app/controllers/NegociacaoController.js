@@ -11,7 +11,7 @@ class NegociacaoController {
         this._negociacoesView = new NegociacoesView($('#negociacoesView'));
         this._listaNegociacoes = new Bind(new ListaNegociacoes(), 
             this._negociacoesView,
-            'adiciona', 'apaga', 'ordena', 'inverteOrdem');
+            'adiciona', 'esvazia', 'ordena', 'inverteOrdem');
             
 
 
@@ -89,7 +89,7 @@ class NegociacaoController {
                 this._listaNegociacoes.esvazia();
             });
 
-        this._listaNegociacoes.apaga();
+        this._listaNegociacoes.esvazia();
         this._mensagem.texto = 'Negociações apagadas com sucesso';
     
     }

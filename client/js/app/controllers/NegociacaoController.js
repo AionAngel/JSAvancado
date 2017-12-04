@@ -26,14 +26,28 @@ class NegociacaoController {
 
         this._ordemAtual = '';
         
+        this._init();
+       
+    }
+
+    _init() {
 
         ConnectionFactory
-            .getConnection()
-            .then(connection => new NegociacaoDao(connection))
-            .then(dao => dao.listaTodos())
-            .then(negociacoes => 
-                negociacoes.forEach(negociacao => 
-                    this._listaNegociacoes.adiciona(negociacao)));
+        .getConnection()
+        .then(connection => new NegociacaoDao(connection))
+        .then(dao => dao.listaTodos())
+        .then(negociacoes => 
+            negociacoes.forEach(negociacao => 
+                this._listaNegociacoes.adiciona(negociacao)));
+
+
+        setInterval(() => {
+
+            this.importaNegociacoes();
+        }, 3000);
+
+
+
     }
     
     adiciona(event){
@@ -107,7 +121,7 @@ class NegociacaoController {
                 
                     JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)))
                 )
-                
+
                 .then(negociacoes => {
                 negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
                 this._mensagem.texto = 'Negociações importadas com sucesso';    

@@ -25,6 +25,8 @@ class NegociacaoController {
         this._mensagemView.update(this._mensagem);
 
         this._ordemAtual = '';
+
+        this._service = new NegociacaoService();
         
         this._init();
        
@@ -32,13 +34,12 @@ class NegociacaoController {
 
     _init() {
 
-        ConnectionFactory
-        .getConnection()
-        .then(connection => new NegociacaoDao(connection))
-        .then(dao => dao.listaTodos())
+        this._service
+        .lista()
         .then(negociacoes => 
             negociacoes.forEach(negociacao => 
-                this._listaNegociacoes.adiciona(negociacao)));
+                this._listaNegociacoes.adiciona(negociacao)))
+                .catch(erro => this._mensagem.texto = erro);
 
 
         setInterval(() => {
@@ -54,7 +55,7 @@ class NegociacaoController {
         
         event.preventDefault();
         let negociacao = this._criaNegociacao();
-        new NegociacaoService()
+        this._service
             .cadastra(negociacao)
             .then(mensagem => {
                 this._listaNegociacoes.adiciona(negociacao);
@@ -86,25 +87,22 @@ class NegociacaoController {
     
     apaga() {
 
-        ConnectionFactory
-            .getConnection()
-            .then(connection => new NegociacaoDao(connection))
-            .then(dao => dao.apagaTodos())
-            .then(mensagem => {
-                this._mensagem.texto = mensagem;
-                this._listaNegociacoes.esvazia();
-            });
 
-        this._listaNegociacoes.esvazia();
-        this._mensagem.texto = 'Negociações apagadas com sucesso';
+        this._service
+        .apaga()
+        .then(mensagem => {
+            this._mensagem.texto = mensagem;
+            this._listaNegociacoes.esvazia();
+        })
+        .catch(erro => this._mensagem.texto = erro);
     
     }
 
     importaNegociacoes() {
         
-        let service = new NegociacaoService();
+        
 
-        service
+        this._service
             .obterNegociacoes()
             .then(negociacoes =>
                 negociacoes.filter(negociacao =>

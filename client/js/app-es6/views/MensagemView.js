@@ -1,4 +1,5 @@
-class MensagemView extends View {
+import {View} from './View';
+export class MensagemView extends View {
     
     constructor (elemento) {
         
